@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { tmdbApi } from '../api/tmdb';
 import { useMovieContext } from '../context/MovieContext';
@@ -7,7 +7,7 @@ import SearchBar from '../components/movies/SearchBar';
 import MovieFilters from '../components/movies/MovieFilters';
 
 export default function Home() {
-  const { lastSearch } = useMovieContext();
+  const { lastSearch, setLastSearch } = useMovieContext();
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -15,120 +15,138 @@ export default function Home() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  // Filter states (Bonus requirement)
+  // Filter states
   const [selectedGenre, setSelectedGenre] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
   const [selectedRating, setSelectedRating] = useState('');
 
   const navigate = useNavigate();
 
-  // Load movies for page 1
-  const loadInitialMovies = useCallback(async (searchQuery) => {
+  const hasActiveFilters = Boolean(selectedGenre || selectedYear || selectedRating);
+
+  // Fetch movies by  priority
+  const fetchMovieCatalog = useCallback(
+    async (targetPage = 1) => {
+      if (lastSearch && lastSearch.trim()) {
+        return await tmdbApi.searchMovies(lastSearch.trim(), targetPage);
+      }
+
+      if (hasActiveFilters) {
+        return await tmdbApi.discoverMovies({
+          genre: selectedGenre,
+          year: selectedYear,
+          rating: selectedRating,
+          page: targetPage,
+        });
+      }
+
+      return await tmdbApi.getTrending(targetPage);
+    },
+    [lastSearch, hasActiveFilters, selectedGenre, selectedYear, selectedRating]
+  );
+
+  useEffect(() => {
+    let isSubscribed = true;
     setLoading(true);
     setError(null);
     setPage(1);
 
-    try {
-      if (searchQuery && searchQuery.trim()) {
-        const data = await tmdbApi.searchMovies(searchQuery.trim(), 1);
+    fetchMovieCatalog(1)
+      .then((data) => {
+        if (!isSubscribed) return;
         setMovies(data.results || []);
         setTotalPages(data.total_pages || 1);
-      } else {
-        const data = await tmdbApi.getTrending(1);
-        setMovies(data.results || []);
-        setTotalPages(data.total_pages || 1);
-      }
-    } catch (err) {
-      console.error('Fetch error:', err);
-      setError('Unable to fetch movies. Please check your internet connection.');
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+      })
+      .catch((err) => {
+        if (!isSubscribed) return;
+        console.error('Fetch error:', err);
+        setError('Unable to load movies. Please check your connection and try again.');
+      })
+      .finally(() => {
+        if (isSubscribed) setLoading(false);
+      });
 
-  useEffect(() => {
-    loadInitialMovies(lastSearch);
-  }, [loadInitialMovies, lastSearch]);
+    return () => {
+      isSubscribed = false;
+    };
+  }, [fetchMovieCatalog]);
 
-  // Load More handler (pagination)
+  // handle load More 
   const handleLoadMore = async () => {
     if (page >= totalPages || loadingMore) return;
     const nextPage = page + 1;
     setLoadingMore(true);
 
     try {
-      let data;
-      if (lastSearch && lastSearch.trim()) {
-        data = await tmdbApi.searchMovies(lastSearch.trim(), nextPage);
-      } else {
-        data = await tmdbApi.getTrending(nextPage);
-      }
-
-      // Append new movies and remove duplicates
-      setMovies((prev) => {
-        const existingIds = new Set(prev.map((m) => m.id));
-        const newUnique = (data.results || []).filter((m) => !existingIds.has(m.id));
-        return [...prev, ...newUnique];
+      const data = await fetchMovieCatalog(nextPage);
+      setMovies((prevMovies) => {
+        const existingIds = new Set(prevMovies.map((m) => m.id));
+        const uniqueNewMovies = (data.results || []).filter((m) => !existingIds.has(m.id));
+        return [...prevMovies, ...uniqueNewMovies];
       });
       setPage(nextPage);
     } catch (err) {
-      console.error('Load more error:', err);
+      console.error('Pagination error:', err);
     } finally {
       setLoadingMore(false);
     }
   };
 
+  // when searching clear any active dropdown filters
   const handleSearch = (searchTerm) => {
-    loadInitialMovies(searchTerm);
+    setSelectedGenre('');
+    setSelectedYear('');
+    setSelectedRating('');
+    setLastSearch(searchTerm);
   };
 
+  // reset dropdown filters
   const handleResetFilters = () => {
     setSelectedGenre('');
     setSelectedYear('');
     setSelectedRating('');
   };
 
-  // Client-side filtering across the fetched movie catalog
-  const filteredMovies = useMemo(() => {
-    return movies.filter((movie) => {
-      // 1. Genre filter
-      if (selectedGenre && !movie.genre_ids?.includes(Number(selectedGenre))) {
-        return false;
-      }
-      // 2. Year filter
-      if (selectedYear) {
-        const releaseYear = movie.release_date ? movie.release_date.slice(0, 4) : '';
-        if (releaseYear !== selectedYear) return false;
-      }
-      // 3. Rating filter
-      if (selectedRating && (movie.vote_average || 0) < Number(selectedRating)) {
-        return false;
-      }
-      return true;
-    });
-  }, [movies, selectedGenre, selectedYear, selectedRating]);
+  const renderSectionHeading = () => {
+    if (lastSearch) {
+      return `Search Results for "${lastSearch}"`;
+    }
+    if (hasActiveFilters) {
+      const criteria = [];
+      if (selectedYear) criteria.push(`Released in ${selectedYear}`);
+      if (selectedRating) criteria.push(`Rated ${selectedRating}+ Stars`);
+      return `Filtered Movies (${criteria.join(' • ') || 'Custom Selection'})`;
+    }
+    return 'Trending Movies';
+  };
 
   return (
     <main className="main-content">
       <SearchBar onSearch={handleSearch} />
 
-      {/* Filter Component */}
       <MovieFilters
         selectedGenre={selectedGenre}
-        onGenreChange={setSelectedGenre}
+        onGenreChange={(val) => {
+          setLastSearch('');
+          setSelectedGenre(val);
+        }}
         selectedYear={selectedYear}
-        onYearChange={setSelectedYear}
+        onYearChange={(val) => {
+          setLastSearch('');
+          setSelectedYear(val);
+        }}
         selectedRating={selectedRating}
-        onRatingChange={setSelectedRating}
+        onRatingChange={(val) => {
+          setLastSearch('');
+          setSelectedRating(val);
+        }}
         onReset={handleResetFilters}
       />
 
       <div className="section-header">
-        <h2 className="section-title">
-          {lastSearch ? `Search Results for "${lastSearch}"` : 'Trending Movies'}
-        </h2>
+        <h2 className="section-title">{renderSectionHeading()}</h2>
         <p className="section-desc">
-          Showing {filteredMovies.length} {filteredMovies.length === 1 ? 'title' : 'titles'}
+          Showing {movies.length} {movies.length === 1 ? 'title' : 'titles'}
         </p>
       </div>
 
@@ -136,17 +154,17 @@ export default function Home() {
 
       {loading && <div className="status-loading">Loading movies...</div>}
 
-      {!loading && !error && filteredMovies.length === 0 && (
+      {!loading && !error && movies.length === 0 && (
         <div className="status-empty">
-          <p className="empty-title">No matching movies found</p>
-          <p className="empty-subtitle">Try adjusting your filters or search terms.</p>
+          <p className="empty-title">No movies match this filter</p>
+          <p className="empty-subtitle">Try choosing a different year, genre, or search term.</p>
         </div>
       )}
 
-      {!loading && !error && filteredMovies.length > 0 && (
+      {!loading && !error && movies.length > 0 && (
         <>
           <div className="movie-grid">
-            {filteredMovies.map((movie) => (
+            {movies.map((movie) => (
               <MovieCard
                 key={movie.id}
                 movie={movie}

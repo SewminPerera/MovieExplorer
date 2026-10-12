@@ -25,7 +25,7 @@ export default function MovieFilters({
     fetchGenreList();
   }, []);
 
-  // Generate recent years (current year down to 1990)
+  // Generate recent years
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 35 }, (_, idx) => currentYear - idx);
 

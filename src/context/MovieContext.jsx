@@ -3,7 +3,6 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const MovieContext = createContext(null);
 
 export const MovieProvider = ({ children }) => {
-  // Theme state: dark by default, retrieved from localStorage
   const [mode, setMode] = useState(() => {
     return localStorage.getItem('app_theme') || 'dark';
   });

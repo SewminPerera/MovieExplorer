@@ -8,7 +8,7 @@ export default function SearchBar({ onSearch }) {
   const { lastSearch, setLastSearch } = useMovieContext();
   const [query, setQuery] = useState(lastSearch);
 
-  // When context's lastSearch updates, keep query in sync
+  // keep query in sync
   useEffect(() => {
     setQuery(lastSearch);
   }, [lastSearch]);
@@ -23,7 +23,7 @@ export default function SearchBar({ onSearch }) {
   const handleClear = () => {
     setQuery('');
     setLastSearch('');
-    onSearch(''); // Triggers return to trending movies
+    onSearch(''); // triggers return to trending movies
   };
 
   return (

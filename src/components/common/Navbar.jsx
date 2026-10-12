@@ -1,16 +1,23 @@
 import React from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import { useMovieContext } from '../../context/MovieContext';
 import './Navbar.css';
 
 export default function Navbar() {
-  const { mode, toggleTheme, favorites } = useMovieContext();
+  const { mode, toggleTheme, favorites, setLastSearch } = useMovieContext();
+  const navigate = useNavigate();
+
+  const handleBrandClick = (e) => {
+    e.preventDefault();
+    setLastSearch(''); // reset  active query 
+    navigate('/');     //home page
+  };
 
   return (
     <header className="navbar">
-      <Link to="/" className="brand-link">
+      <Link to="/" className="brand-link" onClick={handleBrandClick}>
         <h1 className="brand-title">
           Movie<span>Explorer</span>
         </h1>
@@ -21,6 +28,7 @@ export default function Navbar() {
           to="/"
           className={({ isActive }) => (isActive ? 'nav-item active' : 'nav-item')}
           end
+          onClick={() => setLastSearch('')}
         >
           Home
         </NavLink>

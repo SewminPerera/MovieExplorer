@@ -51,12 +51,12 @@ export default function MovieDetails() {
     );
   }
 
-  // Find official YouTube trailer or teaser
+  // find official youTube trailer
   const trailer = movie.videos?.results?.find(
     (vid) => vid.site === 'YouTube' && (vid.type === 'Trailer' || vid.type === 'Teaser')
   );
 
-  // Take top 8 billed cast members
+  // take top 8 billed cast members
   const topCast = movie.credits?.cast?.slice(0, 8) || [];
 
   return (

@@ -1,70 +1,45 @@
-# Getting Started with Create React App
+# Movie Explorer
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A responsive web application built with React that allows users to discover trending titles, search for movies, filter by release details, view cast and trailers, and manage a list of favorites.
 
-## Available Scripts
+- Live Demo - 
+- GitHub Repository - https://github.com/SewminPerera/MovieExplorer
+- GitLab Rpository -  https://gitlab.com/SewminPerera/movieExplorer.git
 
-In the project directory, you can run:
+# Features Implemented
 
-### `npm start`
+- Trending Movies - Fetches and displays popular releases for the current week on initial load.
+- Search and Query Persistence - Real time search that preserves the last query in `localStorage` across page reloads.
+- Filtering & Discovery - Filter catalog results directly by Genre, Release Year, and Minimum Rating via TMDb's discover API.
+- Pagination - "Load More" button to append subsequent result pages without resetting scroll position.
+- Detailed Movie View (`/movie/:id`) - Displays synopsis, runtime, genre tags, user score, top cast members, and an embedded YouTube trailer.
+- Favorites System - Toggle favorites on any card; persisted locally in `localStorage` and viewable on `/favorites`.
+- Theme Switching - Dark and Light mode toggle driven by custom CSS variables and saved to `localStorage`.
+- Responsive Layout - Mobile first CSS grid supporting 2-column mobile displays up to multi column desktop screens.
+- Mock Authentication - Basic login form interface located at `/login`.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+# API Usage
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+This application integrates with The Movie Database (TMDb) using a centralized Axios client.
 
-### `npm test`
+An Axios request interceptor automatically attaches the API key to every outgoing request. The primary endpoints used include:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- `GET /trending/movie/week` – Fetches weekly trending titles.
+- `GET /search/movie` – Searches films by title query with pagination.
+- `GET /discover/movie` – Queries films based on release year, genre ID, and vote average.
+- `GET /movie/{id}?append_to_response=credits,videos` – Retrieves full film metadata along with cast credits and YouTube trailer keys in a single round-trip.
+- `GET /genre/movie/list` – Populates available genres in the filter dropdown.
 
-### `npm run build`
+# Project Setup
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Prerequisites
+- Node.js (v16.x or newer recommended)
+- npm or yarn
+- A TMDb API key ([themoviedb.org](https://developer.themoviedb.org/docs))
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# Installation & Local Run
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. Clone the repository:
+   ```bash
+   git clone [https://github.com/SewminPerera/MovieExplorer.git](https://github.com/SewminPerera/MovieExplorer.git)
+   cd MovieExplorer
