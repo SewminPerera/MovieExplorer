@@ -10,16 +10,15 @@
 .navbar-bar {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 1.25rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
 }
 
-/* Brand Logo */
+/* Brand Logo (Left) */
 .brand-logo {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 700;
   color: var(--text-primary, #f8fafc);
   cursor: pointer;
@@ -31,46 +30,18 @@
   color: #ef4444;
 }
 
-/* Right-side quick controls */
-.navbar-actions {
+/* Right Section Container */
+.navbar-right {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1.25rem;
 }
 
-.theme-btn {
-  background: transparent;
-  border: 1px solid var(--border-color, #334155);
-  color: var(--text-primary, #f8fafc);
-  padding: 0.4rem;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.theme-btn:hover {
-  background: var(--bg-hover, rgba(255, 255, 255, 0.08));
-}
-
-.mobile-menu-btn {
-  display: none;
-  background: transparent;
-  border: none;
-  color: var(--text-primary, #f8fafc);
-  padding: 0.4rem;
-  cursor: pointer;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Desktop Navigation */
+/* Desktop Links */
 .desktop-nav {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
 .nav-link-btn,
@@ -106,11 +77,41 @@
   line-height: 1.2;
 }
 
-/* Mobile Dropdown */
+/* Theme Toggle Button */
+.theme-btn {
+  background: transparent;
+  border: 1px solid var(--border-color, #334155);
+  color: var(--text-primary, #f8fafc);
+  padding: 0.4rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.theme-btn:hover {
+  background: var(--bg-hover, rgba(255, 255, 255, 0.08));
+}
+
+/* Mobile Hamburger Button (hidden on desktop) */
+.mobile-menu-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--text-primary, #f8fafc);
+  padding: 0.4rem;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mobile Dropdown Menu */
 .mobile-menu-dropdown {
   display: none;
   flex-direction: column;
-  padding: 0.75rem 1rem 1rem;
+  padding: 0.75rem 1.25rem 1rem;
   background-color: var(--bg-surface, #1e293b);
   border-top: 1px solid var(--border-color, #334155);
   gap: 0.5rem;
@@ -138,7 +139,7 @@
   color: #ef4444;
 }
 
-/* Mobile Viewport Breakpoint */
+/* Mobile Breakpoint */
 @media (max-width: 768px) {
   .desktop-nav {
     display: none;
@@ -150,5 +151,9 @@
 
   .mobile-menu-dropdown {
     display: flex;
+  }
+
+  .navbar-right {
+    gap: 0.5rem;
   }
 }
