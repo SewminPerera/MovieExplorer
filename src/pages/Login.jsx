@@ -29,7 +29,7 @@ export default function Login() {
             required
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="e.g. johndoe"
+            placeholder="e.g. sewwa"
           />
         </div>
 
@@ -41,7 +41,7 @@ export default function Login() {
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="••••••••>"
+            placeholder="........."
           />
         </div>
 
