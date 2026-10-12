@@ -1,0 +1,79 @@
+.filters-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 14px 18px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 140px;
+}
+
+.filter-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.filter-select {
+  height: 40px;
+  padding: 0 12px;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.85rem;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.filter-select:focus {
+  border-color: var(--primary-accent);
+}
+
+.reset-filters-btn {
+  height: 40px;
+  padding: 0 14px;
+  background-color: transparent;
+  border: 1px dashed var(--border-color);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  align-self: flex-end;
+  transition: all 0.2s ease;
+}
+
+.reset-filters-btn:hover {
+  border-color: var(--primary-accent);
+  color: var(--primary-accent);
+}
+
+@media (max-width: 600px) {
+  .filters-bar {
+    gap: 10px;
+    padding: 12px;
+  }
+  
+  .filter-group {
+    min-width: calc(50% - 6px);
+  }
+
+  .reset-filters-btn {
+    width: 100%;
+    margin-top: 4px;
+  }
+}

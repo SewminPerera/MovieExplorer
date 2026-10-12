@@ -1,0 +1,139 @@
+.movie-card {
+  position: relative;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.25s ease, 
+              border-color 0.25s ease;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.poster-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  background-color: #0b0f19;
+}
+
+.movie-poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+/* Floating Rating Badge */
+.rating-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background-color: rgba(11, 15, 25, 0.85);
+  backdrop-filter: blur(6px);
+  color: #ffffff;
+  padding: 3px 6px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  z-index: 2;
+}
+
+.rating-badge svg {
+  color: var(--rating-gold);
+  font-size: 0.8rem;
+}
+
+/* Floating Favorite Heart Button */
+.fav-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background-color: rgba(11, 15, 25, 0.85);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: transform 0.15s ease, background-color 0.2s ease;
+}
+
+.fav-btn.active svg {
+  color: var(--primary-accent);
+}
+
+.fav-btn:active {
+  transform: scale(0.9);
+}
+
+.movie-meta {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.movie-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.movie-year {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* Tablet & Desktop enhancements */
+@media (min-width: 640px) {
+  .movie-card {
+    border-radius: 12px;
+  }
+
+  .movie-meta {
+    padding: 12px 14px;
+    gap: 4px;
+  }
+
+  .movie-title {
+    font-size: 0.9rem;
+  }
+
+  .movie-year {
+    font-size: 0.8rem;
+  }
+
+  .fav-btn {
+    top: 8px;
+    right: 8px;
+  }
+
+  .movie-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--border-hover);
+    box-shadow: var(--shadow-card);
+  }
+
+  .movie-card:hover .movie-poster {
+    transform: scale(1.05);
+  }
+}
