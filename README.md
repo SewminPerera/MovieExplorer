@@ -2,7 +2,7 @@
 
 A responsive web application built with React that allows users to discover trending titles, search for movies, filter by release details, view cast and trailers, and manage a list of favorites.
 
-- Live Demo - 
+- Live Demo - https://movieexplorer-iuwrp4vc8-sewminpereras-projects.vercel.app/
 - GitHub Repository - https://github.com/SewminPerera/MovieExplorer
 - GitLab Rpository -  https://gitlab.com/SewminPerera/movieExplorer.git
 
