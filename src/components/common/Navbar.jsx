@@ -24,13 +24,39 @@ export default function Navbar() {
   return (
     <header className="navbar-container">
       <div className="navbar-bar">
-        {/* Brand Logo */}
+        {/* Left: Brand Logo */}
         <div className="brand-logo" onClick={handleBrandClick}>
           Movie<span className="brand-accent">Explorer</span>
         </div>
 
-        {/* Right side controls: Theme toggle + Hamburger */}
-        <div className="navbar-actions">
+        {/* Right: Desktop Links + Theme Toggle + Mobile Hamburger */}
+        <div className="navbar-right">
+          <nav className="desktop-nav">
+            <button
+              type="button"
+              className="nav-link-btn"
+              onClick={handleBrandClick}
+            >
+              Home
+            </button>
+
+            <NavLink
+              to="/favorites"
+              className={({ isActive }) => (isActive ? 'nav-item active' : 'nav-item')}
+            >
+              Favorites
+              {favorites.length > 0 && <span className="fav-badge">{favorites.length}</span>}
+            </NavLink>
+
+            <NavLink
+              to="/login"
+              className={({ isActive }) => (isActive ? 'nav-item active' : 'nav-item')}
+            >
+              Login
+            </NavLink>
+          </nav>
+
+          {/* Theme button (always beside nav on desktop, beside hamburger on mobile) */}
           <button
             type="button"
             className="theme-btn"
@@ -40,6 +66,7 @@ export default function Navbar() {
             {mode === 'dark' ? <LightModeIcon fontSize="small" /> : <DarkModeIcon fontSize="small" />}
           </button>
 
+          {/* Hamburger toggle (mobile only) */}
           <button
             type="button"
             className="mobile-menu-btn"
@@ -49,35 +76,9 @@ export default function Navbar() {
             {menuOpen ? <CloseIcon /> : <MenuIcon />}
           </button>
         </div>
-
-        {/* Desktop Navigation */}
-        <nav className="desktop-nav">
-          <button
-            type="button"
-            className="nav-link-btn"
-            onClick={handleBrandClick}
-          >
-            Home
-          </button>
-
-          <NavLink
-            to="/favorites"
-            className={({ isActive }) => (isActive ? 'nav-item active' : 'nav-item')}
-          >
-            Favorites
-            {favorites.length > 0 && <span className="fav-badge">{favorites.length}</span>}
-          </NavLink>
-
-          <NavLink
-            to="/login"
-            className={({ isActive }) => (isActive ? 'nav-item active' : 'nav-item')}
-          >
-            Login
-          </NavLink>
-        </nav>
       </div>
 
-      {/* Mobile Dropdown Menu */}
+      {/* Mobile Dropdown */}
       {menuOpen && (
         <div className="mobile-menu-dropdown">
           <button
